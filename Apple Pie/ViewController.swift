@@ -34,9 +34,18 @@ class ViewController: UIViewController {
         updateUI()
     }
     
+    func updateCorrectWordLabel() {
+        var displayWord: [String] = []
+        for letter in currentGame.guessedWord {
+            displayWord.append(String(letter))
+        }
+        correctWordLabel.text = displayWord.joined(separator: " ")
+    }
+    
     func updateUI() {
-        let image = "Tree\(currentGame.mistakesRemaining < 8 ? currentGame.mistakesRemaining : 7)"
+        let image = "Tree\(currentGame.mistakesRemaining < 0 ? 0 : currentGame.mistakesRemaining < 8 ? currentGame.mistakesRemaining : 7)"
         treeImageView.image = UIImage(named: image)
+        updateCorrectWordLabel()
         scoreLabel.text = "Выиграно: \(totalWins), проиграно: \(totalLoses)"
     }
     
@@ -48,6 +57,9 @@ class ViewController: UIViewController {
     // MARK: - Actions
     @IBAction func letterButtonPressed(_ sender: UIButton) {
         sender.isEnabled = false
+        let letter = sender.title(for: .normal)!
+        currentGame.playerGuessed(letter: Character(letter))
+        updateUI()
     }
     
 
